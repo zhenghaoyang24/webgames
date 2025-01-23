@@ -1,7 +1,6 @@
 {
   "name": "webgames",
-  "version": "0.0.0",
-  "private": true,
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -19,6 +18,7 @@
     "@vitejs/plugin-vue": "^5.2.1",
     "@vitejs/plugin-vue-jsx": "^4.1.1",
     "@vue/tsconfig": "^0.7.0",
+    "less": "^4.2.2",
     "npm-run-all2": "^7.0.2",
     "typescript": "~5.7.3",
     "vite": "^6.0.11",

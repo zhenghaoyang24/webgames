@@ -1,18 +1,21 @@
 <script setup>
 import Minesweeper from "@/components/Minesweeper.vue";
+import NavBar from "@/components/NavBar.vue";
 
 </script>
 
 <template>
-  <header>
+  <nav>
+    <NavBar></NavBar>
+  </nav>
 
-  </header>
-
-  <main>
+  <main class="main">
     <Minesweeper></Minesweeper>
   </main>
 </template>
 
 <style scoped>
-
+.main{
+  padding-top: 60px;
+}
 </style>

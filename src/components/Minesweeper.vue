@@ -345,9 +345,6 @@ onMounted(initGame)
   align-items: center;
   font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
   padding: 20px;
-  background: #f0f0f0;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 .game-info {
