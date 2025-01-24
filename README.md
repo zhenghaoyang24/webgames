@@ -1,5 +1,8 @@
 # webgames
 
+中文 | [英文](https://github.com/zhenghaoyang24/filetree/blob/master/README_EN.md)
+
+
 🎮 **webgames** 是一个包含多个小游戏的网页应用，打开即可游玩！。所有游戏均基于 Vue 3 开发，代码简洁易扩展，欢迎体验和贡献！
 
 ---
@@ -51,7 +54,7 @@
 
 ## 许可证
 
-本项目基于 [MIT 许可证](LICENSE) 开源。
+本项目基于 [MIT 许可证](https://github.com/zhenghaoyang24/webgames?tab=MIT-1-ov-file) 开源。
 
 ---
 
