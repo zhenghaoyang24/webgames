@@ -9,7 +9,7 @@ export const games = [
         name: '贪吃蛇',
         component: 'SnakeGame',
         loadComponent: () => import('@/components/games/SnakeGame.vue'),
-        description: '一个简单的贪吃蛇游戏。通过键盘方向键（上下左右）控制方向。',
+        description: '一个简单的贪吃蛇游戏。通过键盘方向键（上下左右）控制方向。小心！碰到墙壁会死亡！',
     },
     {
         name: '2048',
