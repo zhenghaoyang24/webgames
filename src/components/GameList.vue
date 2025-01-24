@@ -49,12 +49,13 @@ const selectGame = (component: string) => {
 
 .game-list {
   .tab-transition();
+  padding: 5px;
 }
 
 .game-item {
-  padding: 10px 20px;
+  padding: 7px 7px;
   font-size: 16px;
-  color: #333;
+  color: #2c2c2c;
   cursor: pointer;
   transition: background 0.2s;
 
