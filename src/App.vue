@@ -1,6 +1,7 @@
 <script setup>
-import Minesweeper from "@/components/Minesweeper.vue";
+import Minesweeper from "@/components/games/Minesweeper.vue";
 import NavBar from "@/components/NavBar.vue";
+import SnakeGame from "@/components/games/SnakeGame.vue";
 
 </script>
 
@@ -8,8 +9,8 @@ import NavBar from "@/components/NavBar.vue";
   <nav>
     <NavBar></NavBar>
   </nav>
-
   <main class="main">
+    <SnakeGame></SnakeGame>
     <Minesweeper></Minesweeper>
   </main>
 </template>
