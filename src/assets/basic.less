@@ -1,0 +1,33 @@
+.tab-content{
+  position: relative;
+  display: inline-block;
+}
+.tab-box{
+  box-sizing: border-box;
+  width: 35px;
+  height: 35px;
+  color: #565656;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px;
+  background: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.32);
+}
+.tab-transition{
+  width: 100px;
+  position: absolute;
+  top: 0; /* 列表顶部与按钮对齐 */
+  left: 100%; /* 列表显示在按钮右侧 */
+  list-style: none;
+  margin-left: 5px;
+  margin-top: 0;
+  padding: 10px;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 10;
+}

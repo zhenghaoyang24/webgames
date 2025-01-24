@@ -24,13 +24,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import GameListIcon from "@/components/icon/GameListIcon.vue";
-
-// 游戏列表数据
-const games = [
-  { name: '扫雷', component: 'Minesweeper' },
-  { name: '贪吃蛇', component: 'SnakeGame' },
-];
-
+import { games } from "@/data/gameList.ts"; // 导入游戏列表
 // 是否显示游戏列表
 const showList = ref(false);
 
@@ -42,41 +36,19 @@ const selectGame = (component: string) => {
 };
 </script>
 
-<style lang="less" scoped>
+<style scoped lang="less">
+@import "@/assets/basic.less";
 .game-list-container {
-  position: fixed;
-  display: inline-block;
-  margin: 10px;
+  .tab-content();
+
 }
 
 .game-list-title {
-  box-sizing: border-box;
-  width: 30px;
-  height: 30px;
-  color: #565656;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  padding: 5px;
-  background: #ffffff;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.32);
+  .tab-box();
 }
 
 .game-list {
-  width: 100px;
-  position: absolute;
-  top: 0; /* 列表顶部与按钮对齐 */
-  left: 100%; /* 列表显示在按钮右侧 */
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  background: #fff;
-  border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  z-index: 10;
+  .tab-transition();
 }
 
 .game-item {
