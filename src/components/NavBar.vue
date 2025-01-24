@@ -1,5 +1,7 @@
 <script setup lang="ts">
 
+import LogoIcon from "@/components/icon/LogoIcon.vue";
+
 const toGithub = () => {
   window.open(`https://github.com/zhenghaoyang24/webgames`, "_blank");
 }
@@ -8,6 +10,7 @@ const toGithub = () => {
 <template>
   <nav class="navbar">
     <div class="nav-logo">
+        <LogoIcon/>
       WebGames
     </div>
     <div class="nav-ctrl">
@@ -46,9 +49,16 @@ const toGithub = () => {
   }
 
   .nav-logo{
+    display: flex;
+    align-items: center;
     font-weight: 900;
     font-size: large;
-
+    color: black;
+    svg{
+      margin-right: 5px;
+      width: 25px;
+      height: 25px;
+    }
   }
 }
 
