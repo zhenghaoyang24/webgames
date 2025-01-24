@@ -17,7 +17,8 @@ Play online: [vue-webgames](https://vue-webgames.netlify.app/)
    Merge number tiles to reach 2048.
 3. **Minesweeper**  
    The classic Minesweeper game, testing your logical reasoning skills.
-
+4. **Sudoku**  
+   A simple Sudoku game, fill in the correct numbers.
 
 ## Tech Stack
 

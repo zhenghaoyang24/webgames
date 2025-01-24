@@ -21,6 +21,6 @@ export const games = [
         name: '数独',
         component: 'SudokuGame',
         loadComponent: () => import('@/components/games/SudokuGame.vue'),
-        description: '一个简单的数独游戏，填入正确的数字吧。',
+        description: '一个简单的数独游戏，填入 1 - 9 之间的数字，保证每行每列不重复。',
     },
 ];
