@@ -2,8 +2,8 @@
   <div class="snake-game">
     <!-- 游戏信息 -->
     <div class="game-info">
-      <span>分数: {{ score }}</span>
-      <span>时间: {{ gameTime }}s</span>
+      <span>🚩分数: {{ score }}</span>
+      <span>⏰时间: {{ gameTime }}s</span>
     </div>
 
     <!-- 控制按钮 -->
@@ -234,6 +234,9 @@ onUnmounted(() => {
   margin-bottom: 20px;
   font-size: 20px;
   font-weight: bold;
+  >span:nth-child(2){
+    margin-left: 30px;
+  }
 }
 
 .game-controls {
