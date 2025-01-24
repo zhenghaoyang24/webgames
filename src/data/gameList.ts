@@ -17,4 +17,10 @@ export const games = [
         loadComponent: () => import('@/components/games/Game2048.vue'),
         description: '一个简单的2048游戏，通过键盘方向键（上下左右）移动数字，相同数字会合并并累加分数。',
     },
+    {
+        name: '数独',
+        component: 'SudokuGame',
+        loadComponent: () => import('@/components/games/SudokuGame.vue'),
+        description: '一个简单的数独游戏，填入正确的数字吧。',
+    },
 ];
