@@ -29,12 +29,21 @@ const handleSelectGame = (component: string) => {
   <main class="main">
     <!-- 游戏列表 -->
     <GameList @select-game="handleSelectGame" />
-    <component :is="currentGame" />
+    <keep-alive>
+      <component :is="currentGame" />
+    </keep-alive>
+    <div v-if="!currentGame" class="start-content">
+      选择一个游戏开始吧！
+    </div>
   </main>
 </template>
 
 <style scoped>
 .main{
   padding-top: 60px;
+}
+.start-content{
+  display: flex;
+  justify-content: center;
 }
 </style>

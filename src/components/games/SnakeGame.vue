@@ -46,21 +46,28 @@ const CELL_SIZE = 20; // 每个格子的大小
 const INITIAL_SPEED = 200; // 初始速度（毫秒）
 
 // 游戏状态
-const gameGrid = ref<number[][]>([]); // 游戏网格
-const snake = ref<{ x: number; y: number }[]>([]); // 蛇的身体
-const direction = ref<{ x: number; y: number }>({ x: 1, y: 0 }); // 蛇的移动方向
-const food = ref<{ x: number; y: number }>({ x: 0, y: 0 }); // 食物的位置
-const score = ref(0); // 分数
-const gameTime = ref(0); // 游戏时间
-const isPlaying = ref(false); // 是否正在游戏
-const gameInterval = ref<number | null>(null); // 游戏循环
-const isGameOver = ref(false); // 游戏是否结束
+const gameGrid = ref<number[][]>([]);
+const snake = ref<{ x: number; y: number }[]>([]);
+const direction = ref<{ x: number; y: number }>({ x: 1, y: 0 });
+const food = ref<{ x: number; y: number }>({ x: 0, y: 0 });
+const score = ref(0);
+const gameTime = ref(0);
+const isPlaying = ref(false);
+const gameInterval = ref<number | null>(null);
+const timeUpdateInterval = ref<number | null>(null); // 新增时间更新定时器
+const isGameOver = ref(false);
 
 // 初始化游戏网格
 const initGameGrid = () => {
   gameGrid.value = Array.from({ length: GRID_SIZE }, () =>
       Array.from({ length: GRID_SIZE }, () => 0)
   );
+
+  // 清除所有单元格的背景颜色
+  const cells = document.querySelectorAll('.game-cell');
+  cells.forEach(cell => {
+    (cell as HTMLElement).style.backgroundColor = '';
+  });
 };
 
 // 初始化蛇
@@ -83,12 +90,33 @@ const generateFood = () => {
 // 更新游戏网格
 const updateGrid = () => {
   initGameGrid(); // 清空网格
+
   // 渲染蛇
-  snake.value.forEach((segment) => {
+  snake.value.forEach((segment, index) => {
+    const color = getSnakeColor(index, snake.value.length);
     gameGrid.value[segment.y][segment.x] = 1;
+    // 为每个蛇节设置颜色
+    const cellElement = document.querySelector(`.game-row:nth-child(${segment.y + 1}) .game-cell:nth-child(${segment.x + 1})`);
+    if (cellElement) {
+      cellElement.style.backgroundColor = color;
+    }
   });
+
   // 渲染食物
   gameGrid.value[food.value.y][food.value.x] = 2;
+};
+
+// 计算蛇的颜色
+const getSnakeColor = (index: number, length: number) => {
+  const headColor = [76, 175, 80]; // #4caf50
+  const tailColor = [200, 255, 200]; // 浅绿色
+  const ratio = index / length;
+
+  const r = Math.round(headColor[0] + (tailColor[0] - headColor[0]) * ratio);
+  const g = Math.round(headColor[1] + (tailColor[1] - headColor[1]) * ratio);
+  const b = Math.round(headColor[2] + (tailColor[2] - headColor[2]) * ratio);
+
+  return `rgb(${r}, ${g}, ${b})`;
 };
 
 // 移动蛇
@@ -137,8 +165,12 @@ const startGame = () => {
     isPlaying.value = true;
     gameInterval.value = setInterval(() => {
       moveSnake();
-      gameTime.value++;
     }, INITIAL_SPEED);
+
+    // 启动时间更新定时器
+    timeUpdateInterval.value = setInterval(() => {
+      gameTime.value++;
+    }, 1000);
   }
 };
 
@@ -149,6 +181,10 @@ const pauseGame = () => {
     if (gameInterval.value) {
       clearInterval(gameInterval.value);
       gameInterval.value = null;
+    }
+    if (timeUpdateInterval.value) {
+      clearInterval(timeUpdateInterval.value);
+      timeUpdateInterval.value = null;
     }
   }
 };
@@ -216,6 +252,9 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown);
   if (gameInterval.value) {
     clearInterval(gameInterval.value);
+  }
+  if (timeUpdateInterval.value) {
+    clearInterval(timeUpdateInterval.value);
   }
 });
 </script>
@@ -287,7 +326,6 @@ onUnmounted(() => {
 }
 
 .snake {
-  background: #4caf50;
   border-radius: 4px;
 }
 
