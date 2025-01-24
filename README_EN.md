@@ -4,13 +4,10 @@
 
 🎮 **webgames** is a web application containing multiple mini-games that you can play right away! All games are developed based on Vue 3, with clean and extensible code. Welcome to experience and contribute!
 
----
 
 ## Project Preview
 
 Play online: [vue-webgames](https://vue-webgames.netlify.app/)
-
----
 
 ## Supported Games
 
@@ -21,7 +18,6 @@ Play online: [vue-webgames](https://vue-webgames.netlify.app/)
 3. **Minesweeper**  
    The classic Minesweeper game, testing your logical reasoning skills.
 
----
 
 ## Tech Stack
 
@@ -29,7 +25,6 @@ Play online: [vue-webgames](https://vue-webgames.netlify.app/)
 - **Language**: TypeScript
 - **Build Tool**: Vite
 
----
 
 ## Contribution Guide
 
@@ -49,7 +44,6 @@ If you have any ideas, feel free to open an `issue` or submit a `PR`. If you wan
 
 3. The game will automatically appear in the game list and can be played directly by clicking on it.
 
----
 
 ## License
 
