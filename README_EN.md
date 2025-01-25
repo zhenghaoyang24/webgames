@@ -19,6 +19,9 @@ Play online: [vue-webgames](https://vue-webgames.netlify.app/)
    The classic Minesweeper game, testing your logical reasoning skills.
 4. **Sudoku**  
    A simple Sudoku game, fill in the correct numbers.
+5. **Memory Cards**  
+   Click on the squares to match all the emojis!
+
 
 ## Tech Stack
 
