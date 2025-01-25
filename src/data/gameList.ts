@@ -27,6 +27,6 @@ export const games = [
         name: '记忆卡片',
         component: 'MemoryCardGame',
         loadComponent: () => import('@/components/games/MemoryCardGame.vue'),
-        description: '记忆卡片游戏。',
+        description: '记忆卡片游戏，点击方格匹配所有 emoji ！',
     },
 ];
