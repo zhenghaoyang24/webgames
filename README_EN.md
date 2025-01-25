@@ -14,28 +14,34 @@ Play online: [vue-webgames](https://vue-webgames.netlify.app/)
 1. **Snake**  
    Control the snake to eat food and avoid hitting walls or its own body.
    
-   <img style="width:150px;heigth:100px" src="https://github.com/user-attachments/assets/7ae2694c-c06b-40d8-bbed-6443fbf9fb5b" />
+   <img style="width:150px;" src="https://github.com/user-attachments/assets/7ae2694c-c06b-40d8-bbed-6443fbf9fb5b" />
    
-3. **2048**  
+2. **2048**  
    Merge number tiles to reach 2048.
 
-   <img style="width:150px;heigth:100px" src="https://github.com/user-attachments/assets/9ba881f8-0c9d-4052-b066-023b03373bc3" />
+   <img style="width:150px;" src="https://github.com/user-attachments/assets/9ba881f8-0c9d-4052-b066-023b03373bc3" />
    
-5. **Minesweeper**  
+3. **Minesweeper**  
    The classic Minesweeper game, testing your logical reasoning skills.
 
-   <img style="width:150px;heigth:100px" src="https://github.com/user-attachments/assets/59370bda-bd95-4c6a-8f9f-2fa56735c8a7" />
+   <img style="width:150px;" src="https://github.com/user-attachments/assets/59370bda-bd95-4c6a-8f9f-2fa56735c8a7" />
    
-7. **Sudoku**  
+4. **Sudoku**  
    A simple Sudoku game, fill in the correct numbers.
 
-   <img style="width:150px;heigth:100px" src="https://github.com/user-attachments/assets/3ab1b7d9-3bd6-4c0d-a1f0-621652572515" />
+   <img style="width:150px;" src="https://github.com/user-attachments/assets/3ab1b7d9-3bd6-4c0d-a1f0-621652572515" />
    
-9. **Memory Cards**  
+5. **Memory Cards**  
    Click on the squares to match all the emojis!
 
-   <img style="width:150px;heigth:100px" src="https://github.com/user-attachments/assets/a4a49ace-b1b2-4836-9e7c-7fe478b62087" />
-   
+   <img style="width:150px;" src="https://github.com/user-attachments/assets/a4a49ace-b1b2-4836-9e7c-7fe478b62087" />
+
+6. **Maze**  
+   A maze that's not too easy, not too difficult!
+
+   <img style="width:150px;" src="https://github.com/user-attachments/assets/000a3f26-cb23-4308-9da5-852328e029e4" />
+
+
 
 
 ## Tech Stack
