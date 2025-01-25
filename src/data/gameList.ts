@@ -23,4 +23,10 @@ export const games = [
         loadComponent: () => import('@/components/games/SudokuGame.vue'),
         description: '一个简单的数独游戏，填入 1 - 9 之间的数字，保证每行每列不重复。',
     },
+    {
+        name: '记忆卡片',
+        component: 'MemoryCardGame',
+        loadComponent: () => import('@/components/games/MemoryCardGame.vue'),
+        description: '记忆卡片游戏。',
+    },
 ];
