@@ -29,4 +29,10 @@ export const games = [
         loadComponent: () => import('@/components/games/MemoryCardGame.vue'),
         description: '记忆卡片游戏，点击方格匹配所有 emoji ！',
     },
+    {
+        name: '迷宫',
+        component: 'MazeGame',
+        loadComponent: () => import('@/components/games/MazeGame.vue'),
+        description: '一个迷宫游戏，不难也不简单！使用键盘方向键移动。',
+    },
 ];
