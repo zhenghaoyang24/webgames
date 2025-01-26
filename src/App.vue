@@ -3,7 +3,8 @@ import { ref, shallowRef } from 'vue';
 import GameList from './components/GameList.vue';
 import NavBar from "@/components/NavBar.vue";
 import { games } from "@/data/gameList.ts";
-import GameDetail from "@/components/GameDetail.vue"; // 导入游戏列表
+import GameDetail from "@/components/GameDetail.vue";
+import Intorduce from "@/components/Intorduce.vue"; // 导入游戏列表
 
 // 当前选择的游戏组件
 const currentGame = shallowRef<any>(null);
@@ -43,7 +44,7 @@ const handleSelectGame = async (component: string) => {
       <component :is="currentGame" />
     </keep-alive>
     <div v-if="!currentGame" class="start-content">
-      选择一个游戏开始吧！
+      <Intorduce/>
     </div>
   </main>
 </template>

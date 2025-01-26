@@ -40,7 +40,6 @@ const selectGame = (component: string) => {
 @import "@/assets/basic.less";
 .game-list-container {
   .tab-content();
-
 }
 
 .game-list-title {
