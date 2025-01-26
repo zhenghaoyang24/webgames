@@ -9,7 +9,7 @@
         <LogoIcon/>
         <h1 class="main-title">webgames</h1>
       </div>
-      <p class="guide-text">快从左上角选择一个游戏开始吧！</p>
+      <p class="guide-text">快从左上角 <GameListIcon style="width: 25px;height: 25px"></GameListIcon> 选择一个游戏开始吧！</p>
     </div>
 
     <!-- 特征卡片网格 -->
@@ -41,13 +41,15 @@
 import { Icon } from '@iconify/vue'
 import { ref, onMounted, onUnmounted } from 'vue'
 import LogoIcon from "@/components/icon/LogoIcon.vue";
+import GameListIcon from "@/components/icon/GameListIcon.vue";
 
 // 画布粒子系统
 const canvas = ref(null)
 const gameNames = ref([
   '扫雷', '贪吃蛇', '2048', '数独', '记忆卡片', '迷宫',
-  '拼字', '跑酷', '猜单词', '纸牌', '连连看', '推箱子',
-  '五子棋', '黑白棋', '华容道', '数独', '24点', '翻牌'
+  '别踩白块儿', '跑酷', '猜单词', '纸牌', '连连看', '推箱子',
+  '五子棋', '黑白棋', '华容道', '数独', '24点', '翻牌','泡泡龙','愤怒的小鸡',
+    '割绳子','跳一跳','消消乐'
 ])
 
 // 特征卡片配置
@@ -103,7 +105,13 @@ const colors = [
   'rgba(255,167,38,ALPHA)',    // 橙色系
   'rgba(155,89,182,ALPHA)',    // 紫色系
   'rgba(52,152,219,ALPHA)',    // 蓝色系
-  'rgba(46,204,113,ALPHA)'     // 绿色系
+  'rgba(46,204,113,ALPHA)',     // 绿色系
+  'rgba(255,255,0,ALPHA)',     // 明黄色系
+  'rgba(255,127,80,ALPHA)',    // 珊瑚色系
+  'rgba(230,230,250,ALPHA)',   // 薰衣草紫色系
+  'rgba(139,0,139,ALPHA)',     // 深紫色系（紫罗兰）
+  'rgba(0,100,0,ALPHA)',       // 深绿色系
+  'rgba(123,104,238,ALPHA)'    // 中紫色系
 ]
 
 onMounted(() => {
@@ -279,6 +287,10 @@ onMounted(() => {
 
   .guide-text {
     font-size: 1rem;
+    >svg{
+     width: 25px;
+      height: 25px;
+    }
   }
 
   .card-grid {
