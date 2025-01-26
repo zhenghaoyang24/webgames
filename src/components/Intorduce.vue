@@ -151,7 +151,7 @@ onMounted(() => {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
 }
 
@@ -160,7 +160,7 @@ onMounted(() => {
   top: 10%;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 2;
+  z-index: 1;
   text-align: center;
   width: 100%;
 }
