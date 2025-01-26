@@ -4,10 +4,15 @@ import GameList from './components/GameList.vue';
 import NavBar from "@/components/NavBar.vue";
 import { games } from "@/data/gameList.ts";
 import GameDetail from "@/components/GameDetail.vue";
-import Intorduce from "@/components/Intorduce.vue"; // 导入游戏列表
+import Introduce from "@/components/Introduce.vue";
+import HomeBtn from "@/components/HomeBtn.vue"; // 导入游戏列表
 
 // 当前选择的游戏组件
 const currentGame = shallowRef<any>(null);
+// 主页按钮点击事件
+const toHomeFn = () => {
+  currentGame.value = null;
+}
 // 游戏介绍
 const gameName = ref<string>('游戏名')
 const gameDescription = ref<string>('游戏介绍')
@@ -39,12 +44,13 @@ const handleSelectGame = async (component: string) => {
     <div class="left-ctrl-content">
       <GameList @select-game="handleSelectGame" />
       <GameDetail v-if="currentGame" :description="gameDescription" :name="gameName" />
+      <HomeBtn @click="toHomeFn" v-if="currentGame"/>
     </div>
     <keep-alive>
       <component :is="currentGame" />
     </keep-alive>
     <div v-if="!currentGame" class="start-content">
-      <Intorduce/>
+      <Introduce/>
     </div>
   </main>
 </template>

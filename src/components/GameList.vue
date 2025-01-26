@@ -57,6 +57,7 @@ const selectGame = (component: string) => {
   color: #2c2c2c;
   cursor: pointer;
   transition: background 0.2s;
+  border-radius: 3px;
 
   &:hover {
     background: #f0f0f0;
