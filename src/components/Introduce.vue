@@ -215,7 +215,6 @@ onMounted(() => {
 .main-title {
   font-size: 3rem;
   color: rgba(24, 24, 24, 0.9);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.54);
   margin: 0;
   letter-spacing: 2px;
 }
@@ -223,10 +222,11 @@ onMounted(() => {
 .guide-text {
   display: inline-flex;
   padding: 3px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.2);
   background-color: rgba(255, 255, 255, 0.66);
+  box-shadow: 0 0 10px 10px rgba(255, 255, 255, 0.66);
   font-size: 1.2rem;
   color: rgba(44, 44, 44, 0.8);
-  text-shadow: 0 1px 4px rgba(0,0,0,0.2);
   margin: 0;
   font-weight: 600;
 }

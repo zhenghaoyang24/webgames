@@ -35,4 +35,10 @@ export const games = [
         loadComponent: () => import('@/components/games/MazeGame.vue'),
         description: '一个迷宫游戏，不难也不简单！使用键盘方向键移动。',
     },
+    {
+        name: '测试游戏',
+        component: 'GameTest',
+        loadComponent: () => import('@/components/games/GameTest.vue'),
+        description: '开发中的游戏。',
+    },
 ];
