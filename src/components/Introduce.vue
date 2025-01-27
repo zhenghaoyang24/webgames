@@ -1,9 +1,7 @@
 <template>
   <div class="container">
-    <!-- 动态背景元素 -->
     <canvas ref="canvas" class="background-canvas"></canvas>
 
-    <!-- 标题和引导文字 -->
     <div class="hero-section">
       <div class="title-group">
         <LogoIcon/>
@@ -12,7 +10,6 @@
       <p class="guide-text">快从左上角 <GameListIcon style="width: 25px;height: 25px"></GameListIcon> 选择一个游戏开始吧！</p>
     </div>
 
-    <!-- 特征卡片网格 -->
     <div class="card-grid">
       <div
           v-for="(card, index) in featureCards"
@@ -43,16 +40,14 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import LogoIcon from "@/components/icon/LogoIcon.vue";
 import GameListIcon from "@/components/icon/GameListIcon.vue";
 
-// 画布粒子系统
 const canvas = ref(null)
 const gameNames = ref([
   '扫雷', '贪吃蛇', '2048', '数独', '记忆卡片', '迷宫',
   '别踩白块儿', '跑酷', '猜单词', '纸牌', '连连看', '推箱子',
   '五子棋', '黑白棋', '华容道', '数独', '24点', '翻牌','泡泡龙','愤怒的小鸡',
-    '割绳子','跳一跳','消消乐'
+  '割绳子','跳一跳','消消乐'
 ])
 
-// 特征卡片配置
 const featureCards = ref([
   { title: '策略', color: '#2E86C1', icon: 'mdi:chess-knight', description: '精心布局才能赢得胜利' },
   { title: '益智', color: '#E67E22', icon: 'ph:puzzle-piece', description: '激活你的大脑潜能' },
@@ -60,64 +55,94 @@ const featureCards = ref([
   { title: '解压', color: '#9B59B6', icon: 'mdi:flower', description: '释放压力的最佳方式' },
 ])
 
-// 粒子系统配置
 class FloatingText {
   constructor(ctx, text, colors) {
     this.ctx = ctx
     this.text = text
-    this.color = colors[Math.floor(Math.random() * colors.length)]
+    this.colors = colors
     this.reset()
   }
 
   reset() {
     this.x = Math.random() * this.ctx.canvas.width
     this.y = Math.random() * this.ctx.canvas.height
-    this.vx = (Math.random() - 0.5) * 2
-    this.vy = (Math.random() - 0.5) * 2
-    this.size = Math.random() * 24 + 24
-    this.alpha = Math.random() * 0.3 + 0.7
+    this.size = Math.random() * 24 + 24  // 24-48px
+
+    // 根据字体大小计算属性
+    const sizeRatio = this.size / 48
+    this.alpha = 0.2 + sizeRatio * 0.8  // 透明度范围：0.2-1.0
+    const speedScale = 0.5 + sizeRatio   // 速度系数：0.5-1.5
+
+    // 运动速度（字体越大速度越快）
+    this.vx = (Math.random() - 0.5) * 2 * speedScale
+    this.vy = (Math.random() - 0.5) * 2 * speedScale
+
+    // 颜色处理
+    const baseColor = this.colors[Math.floor(Math.random() * this.colors.length)]
+    this.color = baseColor.replace('ALPHA', this.alpha)
   }
 
   update() {
     this.x += this.vx
     this.y += this.vy
 
+    // 边界反弹（保留原有物理效果）
     if (this.x < 0 || this.x > this.ctx.canvas.width) this.vx *= -1
     if (this.y < 0 || this.y > this.ctx.canvas.height) this.vy *= -1
   }
 
   draw() {
-    this.ctx.save()
-    this.ctx.font = `${this.size}px Arial Black`
-    this.ctx.fillStyle = this.color.replace(/[^,]+(?=\))/, this.alpha)
-    this.ctx.textAlign = 'center'
-    this.ctx.textBaseline = 'middle'
-    this.ctx.fillText(this.text, this.x, this.y)
-    this.ctx.restore()
+    const ctx = this.ctx
+    ctx.save()
+
+    // 字体设置
+    ctx.font = `${this.size}px Arial Black`
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+
+    // 动态阴影参数（基于字体大小）
+    const shadowOffset = this.size * 0.12  // 增大阴影偏移量
+    const shadowBlur = this.size * 0.25    // 增大阴影模糊度
+    const shadowAlpha = this.alpha * 0.6   // 阴影透明度
+
+    // 绘制阴影
+    ctx.shadowColor = this.color.replace(/ALPHA/, shadowAlpha)
+    ctx.shadowBlur = shadowBlur
+    ctx.shadowOffsetX = shadowOffset
+    ctx.shadowOffsetY = shadowOffset
+    ctx.fillStyle = this.color
+    ctx.fillText(this.text, this.x, this.y)
+
+    // 绘制主体文字（关闭阴影）
+    ctx.shadowColor = 'transparent'
+    ctx.fillStyle = this.color
+    ctx.fillText(this.text, this.x, this.y)
+
+    ctx.restore()
   }
 }
 
-// 画布初始化
-let particles = []
 const colors = [
-  'rgba(255,107,107,ALPHA)',   // 红色系
-  'rgba(78,205,196,ALPHA)',    // 青色系
-  'rgba(255,167,38,ALPHA)',    // 橙色系
-  'rgba(155,89,182,ALPHA)',    // 紫色系
-  'rgba(52,152,219,ALPHA)',    // 蓝色系
-  'rgba(46,204,113,ALPHA)',     // 绿色系
-  'rgba(255,255,0,ALPHA)',     // 明黄色系
-  'rgba(255,127,80,ALPHA)',    // 珊瑚色系
-  'rgba(230,230,250,ALPHA)',   // 薰衣草紫色系
-  'rgba(139,0,139,ALPHA)',     // 深紫色系（紫罗兰）
-  'rgba(0,100,0,ALPHA)',       // 深绿色系
-  'rgba(123,104,238,ALPHA)'    // 中紫色系
+  'rgba(255,107,107,ALPHA)',   // 红色
+  'rgba(78,205,196,ALPHA)',    // 青色
+  'rgba(255,167,38,ALPHA)',    // 橙色
+  'rgba(155,89,182,ALPHA)',    // 紫色
+  'rgba(52,152,219,ALPHA)',    // 蓝色
+  'rgba(46,204,113,ALPHA)',     // 绿色
+  'rgba(255,223,0,ALPHA)',     // 金黄色（金属系）
+  'rgba(255,105,180,ALPHA)',   // 热粉色（霓虹系）
+  'rgba(127,255,212,ALPHA)',   // 碧绿色（清新系）
+  'rgba(255,99,71,ALPHA)',     // 珊瑚色（温暖系）
+  'rgba(147,112,219,ALPHA)',   // 中紫色（神秘系）
+  'rgba(60,179,113,ALPHA)',    // 海洋绿（自然系）
+  'rgba(70,130,180,ALPHA)',    // 钢蓝色（科技系）
+  'rgba(238,130,238,ALPHA)',   // 紫罗兰（渐变系）
+  'rgba(255,228,181,ALPHA)'    // 麦黄色（温暖系）
 ]
 
 onMounted(() => {
   const ctx = canvas.value.getContext('2d')
 
-  // 初始化画布
   const resize = () => {
     canvas.value.width = window.innerWidth
     canvas.value.height = window.innerHeight
@@ -125,12 +150,11 @@ onMounted(() => {
   window.addEventListener('resize', resize)
   resize()
 
-  // 创建粒子
-  particles = gameNames.value.flatMap(name =>
+  // 创建粒子（每个游戏名创建3个粒子）
+  const particles = gameNames.value.flatMap(name =>
       Array.from({ length: 3 }, () => new FloatingText(ctx, name, colors))
   )
 
-  // 动画循环
   let animationFrame
   const animate = () => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
@@ -150,9 +174,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* 样式部分保持不变 */
 .container {
   position: relative;
-  min-height: calc( 100vh - 60px);
+  min-height: calc(100vh - 60px);
 }
 
 .background-canvas {
@@ -168,6 +193,7 @@ onMounted(() => {
   top: 10%;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 1;
   text-align: center;
   width: 100%;
 }
@@ -179,16 +205,17 @@ onMounted(() => {
   gap: 1rem;
   margin-bottom: 0.8rem;
   color: rgba(24, 24, 24, 0.9);
-  svg{
-    width: 45px;
-    height: 45px;
-  }
+}
+
+.title-group svg {
+  width: 45px;
+  height: 45px;
 }
 
 .main-title {
   font-size: 3rem;
   color: rgba(24, 24, 24, 0.9);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.47);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.54);
   margin: 0;
   letter-spacing: 2px;
 }
@@ -196,8 +223,7 @@ onMounted(() => {
 .guide-text {
   display: inline-flex;
   padding: 3px;
-  border-radius: 5%;
-  background-color: rgba(255, 255, 255, 0.55);
+  background-color: rgba(255, 255, 255, 0.66);
   font-size: 1.2rem;
   color: rgba(44, 44, 44, 0.8);
   text-shadow: 0 1px 4px rgba(0,0,0,0.2);
@@ -207,6 +233,7 @@ onMounted(() => {
 
 .card-grid {
   position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
@@ -286,10 +313,11 @@ onMounted(() => {
 
   .guide-text {
     font-size: 1rem;
-    >svg{
-     width: 25px;
-      height: 25px;
-    }
+  }
+
+  .guide-text > svg {
+    width: 25px;
+    height: 25px;
   }
 
   .card-grid {
