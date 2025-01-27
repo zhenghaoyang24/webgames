@@ -168,7 +168,6 @@ onMounted(() => {
   top: 10%;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1;
   text-align: center;
   width: 100%;
 }
@@ -189,7 +188,7 @@ onMounted(() => {
 .main-title {
   font-size: 3rem;
   color: rgba(24, 24, 24, 0.9);
-  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.47);
   margin: 0;
   letter-spacing: 2px;
 }
@@ -197,7 +196,8 @@ onMounted(() => {
 .guide-text {
   display: inline-flex;
   padding: 3px;
-  background-color: rgba(255, 255, 255, 0.66);
+  border-radius: 5%;
+  background-color: rgba(255, 255, 255, 0.55);
   font-size: 1.2rem;
   color: rgba(44, 44, 44, 0.8);
   text-shadow: 0 1px 4px rgba(0,0,0,0.2);
@@ -207,7 +207,6 @@ onMounted(() => {
 
 .card-grid {
   position: relative;
-  z-index: 1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;

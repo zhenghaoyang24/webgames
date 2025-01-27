@@ -57,6 +57,7 @@ const handleSelectGame = async (component: string) => {
 
 <style scoped>
 .left-ctrl-content{
+  z-index: 999;
   display: flex;
   flex-direction: column;
   position: fixed;

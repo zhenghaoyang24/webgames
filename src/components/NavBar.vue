@@ -24,7 +24,7 @@ const toGithub = () => {
 <style scoped lang="less">
 .navbar {
   box-shadow: 0 0 10px 2px #dddddd;
-  z-index: 10;
+  z-index: 999;
   position: fixed;
   padding: 0 10px;
   display: flex;
