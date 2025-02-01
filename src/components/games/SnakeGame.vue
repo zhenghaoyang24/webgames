@@ -30,8 +30,10 @@
             v-for="(cell, x) in row"
             :key="x"
             class="game-cell"
-            :class="{ snake: cell === 1, food: cell === 2 }"
-        ></div>
+            :class="{ snake: cell === 1 }"
+        >
+          <span v-if="cell === 2" class="food-emoji">{{ food.emoji }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -41,20 +43,21 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 
 // 游戏配置
-const GRID_SIZE = 20; // 网格大小
-const CELL_SIZE = 20; // 每个格子的大小
-const INITIAL_SPEED = 200; // 初始速度（毫秒）
+const GRID_SIZE = 20;
+const CELL_SIZE = 20;
+const INITIAL_SPEED = 200;
+const EMOJIS = ['🍎', '🍇', '🍌', '🍓', '🍒', '🍑', '🍐', '🍉', '🥝']; // 新增emoji数组
 
 // 游戏状态
 const gameGrid = ref<number[][]>([]);
 const snake = ref<{ x: number; y: number }[]>([]);
 const direction = ref<{ x: number; y: number }>({ x: 1, y: 0 });
-const food = ref<{ x: number; y: number }>({ x: 0, y: 0 });
+const food = ref<{ x: number; y: number; emoji: string }>({ x: 0, y: 0, emoji: '' }); // 修改food类型
 const score = ref(0);
 const gameTime = ref(0);
 const isPlaying = ref(false);
 const gameInterval = ref<number | null>(null);
-const timeUpdateInterval = ref<number | null>(null); // 新增时间更新定时器
+const timeUpdateInterval = ref<number | null>(null);
 const isGameOver = ref(false);
 
 // 初始化游戏网格
@@ -83,7 +86,13 @@ const generateFood = () => {
     x = Math.floor(Math.random() * GRID_SIZE);
     y = Math.floor(Math.random() * GRID_SIZE);
   } while (gameGrid.value[y][x] !== 0);
-  food.value = { x, y };
+
+  // 随机选择emoji
+  food.value = {
+    x,
+    y,
+    emoji: EMOJIS[Math.floor(Math.random() * EMOJIS.length)]
+  };
   gameGrid.value[y][x] = 2;
 };
 
@@ -319,31 +328,33 @@ onUnmounted(() => {
   display: flex;
 }
 
-.game-cell {
-  width: 20px;
-  height: 20px;
-  border: 1px solid #eee;
-}
 
 .snake {
   border-radius: 4px;
 }
 
-.food {
-  background: #ff4b2b;
-  border-radius: 50%;
+
+
+
+
+.game-cell {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.food-emoji {
   animation: pulse 1s infinite;
+  font-size: 16px;
+  line-height: 1;
 }
 
 @keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
 }
 </style>
