@@ -1,138 +1,289 @@
 <template>
   <div class="game-container">
-    <h1>猜拳游戏</h1>
-
-    <!-- 游戏状态栏 -->
-    <div class="game-status">
-      <p>玩家选择: {{ playerChoice || '未选择' }}</p>
-      <p>电脑选择: {{ computerChoice || '未选择' }}</p>
-      <p>结果: {{ result }}</p>
-      <p>得分: {{ score }}</p>
+    <div v-if="!isPlaying" class="game-intro">
+      <h2>反应力训练游戏</h2>
+      <p>点击屏幕生成小球，准确点击蓝色小球得分！</p>
     </div>
 
-    <!-- 玩家选择按钮 -->
-    <div class="choices">
-      <button @click="play('石头')">✊ 石头</button>
-      <button @click="play('剪刀')">✌️ 剪刀</button>
-      <button @click="play('布')">✋ 布</button>
+    <div class="game-controls">
+      <button @click="handleControlClick">
+        {{ isPlaying ? (isPaused ? '继续' : '暂停') : (timeLeft === 0 ? '再来一局' : '开始游戏') }}
+      </button>
+      <div v-if="isPlaying" class="game-stats">
+        剩余时间：{{ timeLeft }}秒
+      </div>
     </div>
 
-    <!-- 重置按钮 -->
-    <button class="reset-button" @click="resetGame">重置游戏</button>
+    <div v-if="timeLeft === 0 && !isPlaying" class="final-stats">
+      <h3>游戏结果：</h3>
+      <p>命中数：{{ hitCount }}</p>
+      <p>失误数：{{ missCount }}</p>
+      <p>命中率：{{ hitRate }}%</p>
+    </div>
+
+    <div
+        v-if="isPlaying"
+        ref="gameAreaRef"
+        class="game-area"
+        @click="handleGameAreaClick"
+    >
+      <div
+          v-for="ball in balls"
+          :key="ball.id"
+          class="ball"
+          :class="{ 'hit': ball.status === 'hit', 'miss': ball.status === 'miss' }"
+          :style="ballStyle(ball)"
+      ></div>
+    </div>
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
+<script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 
-// 游戏状态
-const playerChoice = ref('')
-const computerChoice = ref('')
-const result = ref('')
-const score = ref(0)
+type BallStatus = 'normal' | 'hit' | 'miss';
 
-// 电脑随机选择
-const getComputerChoice = () => {
-  const choices = ['石头', '剪刀', '布']
-  const randomIndex = Math.floor(Math.random() * choices.length)
-  return choices[randomIndex]
+interface GameBall {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  status: BallStatus;
 }
 
-// 判断游戏结果
-const getResult = (player, computer) => {
-  if (player === computer) {
-    return '平局！'
+const isPlaying = ref(false);
+const isPaused = ref(false);
+const timeLeft = ref(60);
+const balls = ref<GameBall[]>([]);
+const hitCount = ref(0);
+const missCount = ref(0);
+const gameAreaRef = ref<HTMLElement | null>(null);
+let gameTimer: number | null = null;
+
+const hitRate = computed(() => {
+  const total = hitCount.value + missCount.value;
+  return total > 0 ? ((hitCount.value / total) * 100).toFixed(1) : 0;
+});
+
+const ballStyle = (ball: GameBall) => ({
+  left: `${ball.x}px`,
+  top: `${ball.y}px`,
+  width: `${ball.size}px`,
+  height: `${ball.size}px`,
+});
+
+const createNewBall = () => {
+  if (!gameAreaRef.value) return;
+
+  const size = Math.floor(Math.random() * 30 + 40); // 40-70px
+  const maxX = gameAreaRef.value.clientWidth - size;
+  const maxY = gameAreaRef.value.clientHeight - size;
+
+  const newBall: GameBall = {
+    id: Date.now(),
+    x: Math.max(0, Math.floor(Math.random() * maxX)),
+    y: Math.max(0, Math.floor(Math.random() * maxY)),
+    size,
+    status: 'normal',
+  };
+
+  balls.value.push(newBall);
+};
+
+const handleGameAreaClick = (event: MouseEvent) => {
+  if (!isPlaying.value || isPaused.value) return;
+
+  const rect = gameAreaRef.value?.getBoundingClientRect();
+  if (!rect) return;
+
+  // 计算点击位置
+  const clickX = event.clientX - rect.left;
+  const clickY = event.clientY - rect.top;
+
+  // 检查是否命中任何小球
+  let hitBall = false;
+  const updatedBalls = balls.value.map(ball => {
+    const isHit =
+        clickX >= ball.x &&
+        clickX <= ball.x + ball.size &&
+        clickY >= ball.y &&
+        clickY <= ball.y + ball.size;
+
+    if (isHit && ball.status === 'normal') {
+      hitBall = true;
+      hitCount.value++;
+      return { ...ball, status: 'hit' };
+    }
+    return ball;
+  });
+
+  // 如果没有命中任何小球
+  if (!hitBall) {
+    missCount.value++;
+    // 找到最后一个正常状态的小球标记为miss
+    const lastNormalBall = updatedBalls.find(b => b.status === 'normal');
+    if (lastNormalBall) {
+      updatedBalls.forEach(b => {
+        if (b.id === lastNormalBall.id) {
+          b.status = 'miss';
+        }
+      });
+    }
   }
-  if (
-      (player === '石头' && computer === '剪刀') ||
-      (player === '剪刀' && computer === '布') ||
-      (player === '布' && computer === '石头')
-  ) {
-    score.value += 1
-    return '你赢了！'
+
+  // 更新小球状态并添加新球
+  balls.value = updatedBalls;
+  createNewBall();
+
+  // 自动移除已标记的小球
+  setTimeout(() => {
+    balls.value = balls.value.filter(b => b.status === 'normal');
+  }, 200);
+};
+
+const handleControlClick = () => {
+  if (isPlaying.value) {
+    if (isPaused.value) {
+      // 继续游戏
+      isPaused.value = false;
+      startTimer();
+    } else {
+      // 暂停游戏
+      isPaused.value = true;
+      if (gameTimer) {
+        clearInterval(gameTimer);
+        gameTimer = null;
+      }
+    }
+  } else {
+    // 开始新游戏
+    resetGame();
+    isPlaying.value = true;
+    isPaused.value = false;
+    startTimer();
+    createNewBall();
   }
-  score.value -= 1
-  return '你输了！'
-}
+};
 
-// 玩家出拳
-const play = (choice) => {
-  playerChoice.value = choice
-  computerChoice.value = getComputerChoice()
-  result.value = getResult(playerChoice.value, computerChoice.value)
-}
+const startTimer = () => {
+  gameTimer = setInterval(() => {
+    if (!isPaused.value) {
+      timeLeft.value--;
+      if (timeLeft.value <= 0) {
+        endGame();
+      }
+    }
+  }, 1000);
+};
 
-// 重置游戏
 const resetGame = () => {
-  playerChoice.value = ''
-  computerChoice.value = ''
-  result.value = ''
-  score.value = 0
-}
+  timeLeft.value = 60;
+  hitCount.value = 0;
+  missCount.value = 0;
+  balls.value = [];
+};
+
+const endGame = () => {
+  isPlaying.value = false;
+  isPaused.value = false;
+  if (gameTimer) {
+    clearInterval(gameTimer);
+    gameTimer = null;
+  }
+};
+
+onUnmounted(() => {
+  if (gameTimer) {
+    clearInterval(gameTimer);
+  }
+});
 </script>
 
-<style lang="less">
+<style scoped>
 .game-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  text-align: center;
   padding: 20px;
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
-h1 {
-  color: #333;
+.game-intro {
   margin-bottom: 20px;
 }
 
-.game-status {
-  text-align: center;
-  margin-bottom: 20px;
-  p {
-    margin: 5px 0;
-    font-size: 18px;
-    color: #555;
-  }
-}
-
-.choices {
+.game-controls {
   display: flex;
-  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
   margin-bottom: 20px;
-
-  button {
-    padding: 15px 20px;
-    font-size: 18px;
-    border: none;
-    border-radius: 5px;
-    background-color: #2196f3;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-      background-color: #1976d2;
-    }
-  }
 }
 
-.reset-button {
-  padding: 10px 20px;
+button {
+  padding: 10px 30px;
   font-size: 16px;
+  background: #2196F3;
+  color: white;
   border: none;
   border-radius: 5px;
-  background-color: #f44336;
-  color: white;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background 0.3s;
+}
 
-  &:hover {
-    background-color: #d32f2f;
-  }
+button:hover {
+  background: #1976D2;
+}
+
+.game-stats {
+  font-size: 16px;
+  color: #666;
+}
+
+.game-area {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f8f8f8;
+}
+
+.ball {
+  position: absolute;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #2196F3;
+  transform: translate(-50%, -50%);
+}
+
+.ball.hit {
+  background: #4CAF50 !important;
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+.ball.miss {
+  background: #f44336 !important;
+  transform: translate(-50%, -50%) scale(0.8);
+}
+
+.final-stats {
+  margin-top: 20px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.final-stats h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+}
+
+.final-stats p {
+  margin: 8px 0;
+  font-size: 16px;
+  color: #666;
 }
 </style>
