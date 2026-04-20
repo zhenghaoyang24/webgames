@@ -36,6 +36,12 @@ export const games = [
         description: '一个迷宫游戏，不难也不简单！使用键盘方向键移动。',
     },
     {
+        name: '井字棋',
+        component: 'TicTacToe',
+        loadComponent: () => import('@/components/games/TicTacToe.vue'),
+        description: '经典的井字棋游戏，双人对战，横、竖、对角线连成三子即可获胜！',
+    },
+    {
         name: '测试游戏',
         component: 'GameTest',
         loadComponent: () => import('@/components/games/GameTest.vue'),
